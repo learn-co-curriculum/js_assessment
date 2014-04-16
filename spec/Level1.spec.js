@@ -5,6 +5,7 @@ describe('Level1', function() {
 		it('adds and element to the array', function() {
 			var array = ["Blake","Steven","Avi"];
   		// add an element to the array
+  		array.push("Joe");
   		expect(array.length).toEqual(4);
   	});
 
@@ -12,6 +13,7 @@ describe('Level1', function() {
 			var array = ["Blake","Steven","Avi"];
 			spyOn(console, 'log');
 
+			array.forEach(function(item){console.log(item);});
 			// iterate over each element in the array and log it out
 			expect(console.log).toHaveBeenCalledWith("Blake");
 			expect(console.log).toHaveBeenCalledWith("Steven");
@@ -20,13 +22,13 @@ describe('Level1', function() {
 
 		it("returns first element of the array", function(){
 			var array = ["Blake","Steven","Avi"];
-			var element_0 = "banana"; // replace banana with the code that finds the first element
+			var element_0 = array[0];
 			expect(element_0).toEqual("Blake");
 		});
 
 		it("returns the user at an index", function(){
 			var array = ["Blake","Steven","Avi"];
-			var avi_index = "banana"; // replace banana with the code that finds Avi's index
+			var avi_index = array.indexOf("Avi");
 			expect(avi_index).toEqual(2);
 		});
 	});
