@@ -87,7 +87,11 @@ describe('Level3', function() {
 
 		it("deletes values from nested array",function(){
 			// Delete the student named "Billy" from the object
+<<<<<<< HEAD
 			expect(school.students.length).toEqual(3);
+=======
+			expect(school.students.count).toEqual(3);
+>>>>>>> Add specs for level 3
 			expect(school.students.find(function(student) { 
 				return student.name == 'Billy';
 			})).toBeUndefined();
