@@ -4,12 +4,29 @@ describe('Level3', function() {
 	// Will be added to ECMAScript6. 
 	if(!(Array.prototype.find instanceof Function)){
 		// Write your own if it's not defined.
-		Array.prototype.find = function(){};
+		Array.prototype.find = function(callback){
+			var result;
+			this.forEach(function(item){
+				if(callback(item)) {
+					result = item;
+					return; 
+				}
+			});
+			return result;
+		};
 	}
 	// Will be added to ECMAScript6. 
 	if(!(Array.prototype.every instanceof Function)){
 		// Write your own if it's not defined.
-		Array.prototype.every = function(){};
+		Array.prototype.every = function(callback){
+			var result = true;
+			this.forEach(function(item){
+				if(!callback(item)){
+					result = false;
+				}
+			});
+			return result;
+		};
 	}
 	describe("Array find", function(){
 		it("finds first value", function(){
@@ -76,22 +93,30 @@ describe('Level3', function() {
 
 		it("modifies the object",function(){
 			// modify school object. Add property foundedIn with a value of 2013
+			school.foundedIn = 2013;
 			expect(school.foundedIn).toEqual(2013);
 		});
 
 		it("adds to a nested array",function(){
 			// Add a student to the end of the school's students' array.
+			school.students.push({name: "Steven", grade: "A++++"});
 			expect(school.students.length).toEqual(5);
 			expect(school.students.slice(-1)[0].name).not.toEqual("Sophie");
 		});
 
 		it("deletes values from nested array",function(){
 			// Delete the student named "Billy" from the object
-<<<<<<< HEAD
+			var students = school.students;
+			var billy_location;
+			students.forEach(function(student, index){
+				if(student.name === "Billy"){
+					billy_location = index;
+					return; 
+				}
+			});
+
+			school.students.splice(billy_location,1);
 			expect(school.students.length).toEqual(3);
-=======
-			expect(school.students.count).toEqual(3);
->>>>>>> Add specs for level 3
 			expect(school.students.find(function(student) { 
 				return student.name == 'Billy';
 			})).toBeUndefined();
@@ -99,14 +124,23 @@ describe('Level3', function() {
 
 		it("modifies all values from nested array",function(){
 			// Add a property to every student in the students array with a property of semester and assign it the value "Summer".
+			school.students.forEach(function(student){
+				student.semester = "Summer";
+			});
+
 			expect(school.students.every(function(student){ 
 				return student.semester == "Summer";
 			})).toBe(true);
 		});
 
 		it("changes value of object in nested array", function(){
-			// You have to create function "find" on the Array prototype
 			// Change Steven's subject to "Being Fantastic"
+			school.instructors.forEach(function(instructor){
+				if(instructor.name === "Steven"){
+					instructor.subject = 'Being Fantastic';
+					return;
+				}
+			});
 			expect(school.instructors.find(function(instructor) { 
 				return instructor.name == "Steven"; 
 			}).subject).toEqual("Being Fantastic");
@@ -114,6 +148,13 @@ describe('Level3', function() {
 
 		it("changes value of object in nested students array", function(){
 			// Change Frank's grade from "A" to "F".
+			school.students.forEach(function(student){
+				if(student.name === "Frank"){
+					student.grade = "F";
+					return;
+				}
+			});
+
 			expect(school.students.find(function(student){ 
 				return student.name == "Frank";
 			}).grade).toEqual("F");
@@ -122,20 +163,42 @@ describe('Level3', function() {
 		it("finds student by their grade", function(){
 			// Return the name of the student with a "B". 
 			// Assume you don't know the order of the elements.
-			var studentName = "banana"; 
+
+			var student = school.students.find(function(s){
+				return s.grade === 'B';
+			});
+			var studentName = student.name;
 			expect(studentName).toEqual("Marissa");
 		});
 
 		it("finds instructor by their subject", function(){
       // Return the subject of the instructor "Avi". 
       // Assume you don't know the order of the elements.
-      var subjectName = "banana"; 
+      var instructor = school.instructors.find(function(i){
+      	return i.name === "Avi";
+      });
+      var subjectName = instructor.subject; 
       expect(subjectName).toEqual("Hunting");
     });
 
 		it("prints all values from all hashes, including nested ones", function(){
 			spyOn(console, 'log');
 			 // Log all the values in the school. NOTE: If this takes too long, skip it!
+			 
+			 var getKeys = function(i){
+				 	for(var k in i){
+				 		console.log(i[k]);
+				 	}
+			 };
+			 
+			 for(var key in school){
+			 	if(school[key] instanceof Array){
+			 		var arr = school[key];
+			 		arr.forEach(getKeys);
+			 	}else{
+			 		console.log(school[key]);
+			 	}
+			 }
 
 			 expect(console.log).toHaveBeenCalledWith("Happy Funtime School");
 			 expect(console.log).toHaveBeenCalledWith("NYC");
