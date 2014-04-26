@@ -42,7 +42,7 @@ module.exports = function(grunt) {
   shell: {
     test: {
       options: { stdout: true },
-      command: 'jasmine-node spec/'
+      command: './node_modules/jasmine-node/bin/jasmine-node spec/'
     }
   }
 });
